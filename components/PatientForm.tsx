@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { predictReadmission, type PredictionResponse } from "@/lib/api";
+import { predictReadmission, type PredictionResponse, type PatientData } from "@/lib/api";
 
 const AGE_RANGES = [
   "[0-10)",
@@ -67,7 +67,7 @@ const patientSchema = z.object({
 type PatientFormData = z.infer<typeof patientSchema>;
 
 interface PatientFormProps {
-  onPredictionResult: (result: PredictionResponse) => void;
+  onPredictionResult: (result: PredictionResponse, data: PatientData) => void;
 }
 
 export default function PatientForm({ onPredictionResult }: PatientFormProps) {
@@ -89,7 +89,7 @@ export default function PatientForm({ onPredictionResult }: PatientFormProps) {
 
     try {
       const result = await predictReadmission(data);
-      onPredictionResult(result);
+      onPredictionResult(result, data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unexpected error occurred");
     } finally {

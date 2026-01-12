@@ -10,8 +10,17 @@ interface PredictionResultProps {
 }
 
 export default function PredictionResult({ result }: PredictionResultProps) {
-  const { prediction, metadata, disclaimer } = result;
-  const { probability, probabilityPercent, riskLevel, riskCategory } = prediction;
+  const { prediction, metadata, disclaimer, improvements } = result;
+  const {
+    probability,
+    probabilityPercent,
+    rawProbability,
+    riskLevel,
+    riskCategory,
+    confidence,
+    requiresReview,
+    threshold
+  } = prediction;
 
   const getRiskColor = (level: string) => {
     switch (level) {
@@ -62,6 +71,17 @@ export default function PredictionResult({ result }: PredictionResultProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* Review Alert */}
+          {requiresReview && (
+            <Alert variant="warning">
+              <AlertDescription>
+                <strong>Human Review Recommended:</strong> This prediction has low confidence
+                (probability near threshold boundary). Clinical judgment should be prioritized
+                over model prediction for this case.
+              </AlertDescription>
+            </Alert>
+          )}
+
           {/* Risk Level Badge */}
           <div className="flex items-center justify-center p-8 bg-gray-50 rounded-lg">
             <div className="text-center space-y-4">
@@ -93,20 +113,54 @@ export default function PredictionResult({ result }: PredictionResultProps) {
           {/* Technical Details */}
           <div className="grid md:grid-cols-2 gap-4 pt-4 border-t">
             <div>
-              <div className="text-sm font-medium text-gray-500">Probability Score</div>
-              <div className="text-lg font-semibold">{probability.toFixed(4)}</div>
+              <div className="text-sm font-medium text-gray-500">Raw Probability</div>
+              <div className="text-lg font-semibold">
+                {(rawProbability * 100).toFixed(2)}%
+              </div>
+              <div className="text-xs text-gray-500">Before adjustments</div>
             </div>
             <div>
-              <div className="text-sm font-medium text-gray-500">Classification Threshold</div>
-              <div className="text-lg font-semibold">{prediction.threshold}</div>
+              <div className="text-sm font-medium text-gray-500">Adjusted Probability</div>
+              <div className="text-lg font-semibold">
+                {probabilityPercent.toFixed(2)}%
+              </div>
+              <div className="text-xs text-gray-500">
+                {improvements.adjustmentMade > 0 && `+${(improvements.adjustmentMade * 100).toFixed(1)}%`}
+                {improvements.adjustmentMade < 0 && `${(improvements.adjustmentMade * 100).toFixed(1)}%`}
+                {improvements.adjustmentMade === 0 && 'No adjustment'}
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-500">Confidence Level</div>
+              <div className="text-lg font-semibold">
+                <Badge variant={confidence === 'high' ? 'success' : 'warning'}>
+                  {confidence.toUpperCase()}
+                </Badge>
+              </div>
+              <div className="text-xs text-gray-500">
+                {confidence === 'high' ? 'Far from threshold' : 'Near threshold boundary'}
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-500">Age-Specific Threshold</div>
+              <div className="text-lg font-semibold">{threshold.toFixed(2)}</div>
+              <div className="text-xs text-gray-500">
+                {threshold !== 0.5 ? 'Adjusted for age group' : 'Standard threshold'}
+              </div>
             </div>
             <div>
               <div className="text-sm font-medium text-gray-500">Model Version</div>
               <div className="text-lg font-semibold">{metadata.modelVersion}</div>
+              <div className="text-xs text-gray-500">
+                {metadata.fairnessImprovements || 'Standard model'}
+              </div>
             </div>
             <div>
               <div className="text-sm font-medium text-gray-500">Risk Classification</div>
               <div className="text-lg font-semibold capitalize">{riskLevel}</div>
+              <div className="text-xs text-gray-500">
+                {requiresReview ? 'Review recommended' : 'Standard classification'}
+              </div>
             </div>
           </div>
 
