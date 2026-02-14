@@ -115,11 +115,11 @@ export default function PatientForm({ onPredictionResult }: PatientFormProps) {
           )}
 
           <Alert variant="warning">
-            <AlertTitle>Disclaimer</AlertTitle>
+            {/* <AlertTitle>Disclaimer</AlertTitle>
             <AlertDescription>
               This tool is for research and educational purposes only. Do not use for clinical
               decision-making.
-            </AlertDescription>
+            </AlertDescription> */}
           </Alert>
 
           {/* Demographics */}

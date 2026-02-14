@@ -198,11 +198,11 @@ export default function PredictionResult({ result }: PredictionResultProps) {
           </div>
 
           {/* Clinical Disclaimer */}
-          <Alert variant="warning">
+          {/* <Alert variant="warning">
             <AlertDescription className="text-xs">
               <strong>Important:</strong> {disclaimer}
             </AlertDescription>
-          </Alert>
+          </Alert> */}
         </CardContent>
       </Card>
 

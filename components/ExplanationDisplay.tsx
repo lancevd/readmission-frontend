@@ -164,7 +164,7 @@ export default function ExplanationDisplay({
       {/* Disclaimer */}
       <Alert variant="warning">
         <AlertDescription className="text-xs">
-          <strong>Important:</strong> {disclaimer}
+          {/* <strong>Important:</strong> {disclaimer} */}
         </AlertDescription>
       </Alert>
     </div>

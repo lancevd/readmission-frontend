@@ -9,12 +9,12 @@ export default function Home() {
           <p className="text-lg text-gray-600 mb-6">
             Use machine learning to assess the likelihood of patient readmission within 30 days
           </p>
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 inline-block">
+          {/* <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 inline-block">
             <p className="text-sm text-yellow-800">
               <strong>Disclaimer:</strong> This application is for research and educational purposes only.
               Do not use for clinical decision-making.
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 mb-12">
